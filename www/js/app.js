@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-material', 'ionMdInput','ngtweet'])
-
-.run(function($ionicPlatform) {
+angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-material', 'ionMdInput','ngtweet','auth0','firebase'])
+.constant('FIREBASE_URL','https://homelesscare.firebaseio.com/')    
+.run(function($ionicPlatform,$rootScope,$ionicModal) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -18,6 +18,24 @@ angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-mater
             StatusBar.styleDefault();
         }
     });
+
+
+          
+  $rootScope.$on('$stateChangeStart', function (event, toState, toParams,$location) {
+	    var requireLogin = toState.data.requireLogin;
+
+	    if (requireLogin && typeof $rootScope.currentUser === 'undefined') {
+	      event.preventDefault();
+	      // get me a login modal!
+	      $ionicModal.fromTemplateUrl('templates/login.html', {
+				scope : $rootScope
+			}).then(function(modal) {
+				$rootScope.explModal = modal;
+				$rootScope.explModal.show();
+			});
+	    }
+	  });
+
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -25,18 +43,32 @@ angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-mater
     // Turn off caching for demo simplicity's sake
     $ionicConfigProvider.views.maxCache(0);
 
-    /*
+    
     // Turn off back button text
-    $ionicConfigProvider.backButton.previousTitleText(false);
-    */
+    // $ionicConfigProvider.backButton.previousTitleText(false);
+    
 
-    $stateProvider.state('app', {
+    $stateProvider
+    
+    .state('app', {
         url: '/app',
         abstract: true,
         templateUrl: 'templates/menu.html',
-        controller: 'AppCtrl'
+        controller: 'AppCtrl',
+        data: {
+            requireLogin: true
+            }
     })
 
+  .state('app.login', {
+        url: '/login',
+        views: {
+          'menuContent': {
+            templateUrl: 'templates/login.html',
+            controller: ''
+          }
+        }
+      })
     .state('app.activity', {
         url: '/activity',
         views: {
@@ -109,7 +141,7 @@ angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-mater
         }
     })
 
-    .state('app.login', {
+  /*  .state('app.login', {
         url: '/login',
         views: {
             'menuContent': {
@@ -120,7 +152,7 @@ angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-mater
                 template: ''
             }
         }
-    })
+    }) */
 
     .state('app.profile', {
         url: '/profile',

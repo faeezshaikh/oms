@@ -2,9 +2,10 @@
     <ion-content ng-class="{expanded:$scope.isExpanded}">
         <div class="hero slide-up" style="background-image: url('img/profile-bg.jpg');">
             <div class="content">
-                <div class="avatar" style="background-image: url('img/daenerys.jpg');"></div>
-                <h3><a class="light">Daenerys Targaryen</a></h3>
-                <h4>dragon_mommy</h4>
+                <!--<div class="avatar" style="background-image: url('img/daenerys.jpg');"></div>-->
+                <div class="avatar" style="background-image: url('{{imgUrl}}');"></div>
+                <h3><a class="light">{{name}}</a></h3>
+                <h4>{{name}}</h4>
             </div>
         </div>
         <div class="tabs tabs-dark tabs-icon-top static">
@@ -22,7 +23,7 @@
         <div class="list animate-fade-slide-in-right">
             <a ui-sref="app.friends" class="item item-avatar item-icon-right">
                 <img src="img/jon-snow.jpg">
-                <h2>Jon Snow</h2>
+                <h2>{{name}}</h2>
                 <p>Da illest illegitimate</p>
                 <i class="icon ion-chatbubble muted"></i>
             </a>

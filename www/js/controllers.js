@@ -3,7 +3,7 @@
 
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,auth,FIREBASE_URL,$firebaseAuth,$rootScope,$state,PersonService) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
@@ -85,6 +85,88 @@ angular.module('starter.controllers', [])
             fabs[0].remove();
         }
     };
+
+    //// LoginCtrl
+   var chatRef = new Firebase(FIREBASE_URL);
+    var auth = $firebaseAuth(chatRef);
+
+      $scope.login = function(socialPlatform) {
+      console.log('loging attempt');
+      
+      $scope.loginProgress = true;
+      auth.$authWithOAuthPopup(socialPlatform).then(function(authData) {
+        console.log("Logged in as:", authData.uid);
+        $scope.loggedIn = true;
+        $scope.loginProgress = false;
+        PersonService.SetLoginState(true);
+      }).catch(function(error) {
+        console.log("Authentication failed:", error);
+        $scope.loginProgress = false;
+        console.log(error);
+        $scope.msg = "";
+        $("#loginPage").effect("shake", {
+          times: 4
+        }, 1000);
+      });
+    }
+
+     auth.$onAuth(function(authData) {
+      // Once authenticated, instantiate Firechat with our user id and user name
+      if (authData) {
+        $scope.loginProgress = false;
+        $scope.loggedIn = true;
+        $rootScope.currentUser = "user";
+        $scope.explModal.hide();
+//        $window.location.href = "#/app/chat/";
+        console.log('Chat controller. State name = ',$state.current.name);
+        if($state.current.name == 'app.chat') {
+      	  $state.go('app.chat');
+//      	  $window.location.href = "#/app/chat/";
+        } else {
+      	  $state.go('app.profile');
+      	 // $window.location.href = "#/app/feeds";
+        }
+        if (authData.provider == 'facebook') {
+          $scope.userName = authData.facebook.displayName;
+          $scope.userImg = authData.facebook.profileImageURL;
+          $scope.userEmail = authData.facebook.email; // Email works only if user has exposed.
+          PersonService.SetAvatar(authData.facebook.profileImageURL);
+          PersonService.SetUserDetails($scope.userName,$scope.userImg,$scope.userEmail,authData.facebook.displayName);
+        }
+        if (authData.provider == 'twitter') {
+          $scope.userName = authData.twitter.displayName;
+          $scope.userImg = authData.twitter.profileImageURL;
+          $scope.userEmail = authData.twitter.email;
+          PersonService.SetAvatar(authData.twitter.profileImageURL);
+          PersonService.SetUserDetails($scope.userName,$scope.userImg,$scope.userEmail,authData.twitter.displayName);
+        }
+        if (authData.provider == 'google') {
+          $scope.userName = authData.google.displayName;
+          $scope.userImg = authData.google.profileImageURL;
+          $scope.userEmail = authData.google.email;
+          PersonService.SetAvatar(authData.google.profileImageURL);
+          PersonService.SetUserDetails($scope.userName,$scope.userImg,$scope.userEmail,authData.google.displayName);
+        }
+        if (authData.provider == 'github') {
+            $scope.userName = authData.github.displayName;
+            $scope.userImg = authData.github.profileImageURL;
+            $scope.userEmail = authData.github.email;
+            PersonService.SetAvatar(authData.github.profileImageURL);
+            PersonService.SetUserDetails($scope.userName,$scope.userImg,$scope.userEmail,authData.github.displayName);
+          }
+        
+    
+        
+          // Removing firechat.
+        // var chat = new FirechatUI(chatRef, angular.element(document.querySelector('#firechat-wrapper')));
+        // chat.setUser(authData.uid, authData[authData.provider].displayName);
+      }
+    });
+
+    /////
+
+
+
 })
 
 .controller('LoginCtrl', function($scope, $timeout, $stateParams, ionicMaterialInk) {
@@ -93,6 +175,8 @@ angular.module('starter.controllers', [])
         $scope.$parent.hideHeader();
     }, 0);
     ionicMaterialInk.displayEffect();
+
+
 })
 
 
@@ -117,7 +201,7 @@ angular.module('starter.controllers', [])
     ionicMaterialInk.displayEffect();
 })
 
-.controller('ProfileCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
+.controller('ProfileCtrl', function($scope, $stateParams, $timeout, PersonService,ionicMaterialMotion, ionicMaterialInk) {
     // Set Header
     $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
@@ -140,6 +224,11 @@ angular.module('starter.controllers', [])
 
     // Set Ink
     ionicMaterialInk.displayEffect();
+
+    var user = PersonService.GetUserDetails();
+    $scope.imgUrl = user.img;
+
+    $scope.name = user.name;
 })
 
 .controller('ActivityCtrl', function($scope, $stateParams, $timeout, ionicMaterialMotion, ionicMaterialInk) {
