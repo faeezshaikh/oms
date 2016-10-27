@@ -19,18 +19,38 @@ map {
       padding: 5px;
       border: 1px solid #999;
     }
+
+
+.button-bar > .button{
+  border: 1px solid #cfcfcf;
+}
+
+.button-bar > .button:last-child {
+  border-radius: 0px 20px 20px 0px !important;
+}
+.button-bar > .button:first-child {
+    border-radius: 20px 0px 0px 20px !important;
+}
     </style>
     <ion-content ng-class="{expanded:isExpanded}" class="animate-fade-slide-in " scroll="false">
        <!--<div map-lazy-load="https://maps.google.com/maps/api/js">
   <ng-map center="41,-87" zoom="3"></ng-map>
 </div>-->
 
- <div id="panel">
+ <!--<div id="panel">
       <button ng-click="toggleHeatmap()">Toggle Heatmap</button>
       <button ng-click="changeGradient()">Change gradient</button>
       <button ng-click="changeRadius()">Change radius</button>
       <button ng-click="changeOpacity()">Change opacity</button>
+    </div>-->
+
+ <div class="button-bar padding">
+      <a grouped-radio="'Family'" ng-model="data.demographic">Complaints</a>
+       <!--<a grouped-radio="'Veteran'" ng-model="data.demographic">Vsets</a>     -->
+      <a grouped-radio="'Male'" ng-model="data.demographic">Heatmap</a>
+       <a grouped-radio="'Female'" ng-model="data.demographic">Both</a>
     </div>
+
 
 <map zoom="13" center="37.774546, -122.433523" map-type-id="SATELLITE">
    <drawing-manager

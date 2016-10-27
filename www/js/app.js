@@ -6,6 +6,34 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-material', 'ionMdInput','ngtweet','auth0','firebase'])
 .constant('FIREBASE_URL','https://homelesscare.firebaseio.com/')    
+
+.directive('groupedRadio', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope: {
+      model: '=ngModel',
+      value: '=groupedRadio'
+    },
+    link: function(scope, element, attrs, ngModelCtrl) {
+      element.addClass('button');
+      element.on('click', function(e) {
+        scope.$apply(function() {
+          ngModelCtrl.$setViewValue(scope.value);
+        });
+      });
+
+      scope.$watch('model', function(newVal) {
+        element.removeClass('button-balanced');
+        if (newVal === scope.value) {
+          element.addClass('button-balanced');
+        }
+      });
+    }
+  };
+})
+
+
 .run(function($ionicPlatform,$rootScope,$ionicModal) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
