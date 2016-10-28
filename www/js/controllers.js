@@ -3,7 +3,7 @@
 
 angular.module('starter.controllers', [])
 
-.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,auth,FIREBASE_URL,$firebaseAuth,$rootScope,$state,PersonService) {
+.controller('AppCtrl', function($scope, $ionicModal, $ionicPopover, $timeout,auth,CtrlService,FIREBASE_URL,$firebaseAuth,$rootScope,$state,PersonService) {
     // Form data for the login modal
     $scope.loginData = {};
     $scope.isExpanded = false;
@@ -17,6 +17,7 @@ angular.module('starter.controllers', [])
         });
     }
 
+CtrlService.saveCurrentCoords();
     ////////////////////////////////////////
     // Layout Methods
     ////////////////////////////////////////
@@ -123,7 +124,7 @@ angular.module('starter.controllers', [])
       	  $state.go('app.chat');
 //      	  $window.location.href = "#/app/chat/";
         } else {
-      	  $state.go('app.map');
+      	  $state.go('app.profile');
       	 // $window.location.href = "#/app/feeds";
         }
         if (authData.provider == 'facebook') {
@@ -267,7 +268,7 @@ angular.module('starter.controllers', [])
 
 })
 
-.controller('MapCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, ionicMaterialMotion,NgMap) {
+.controller('MapCtrl', function($scope, $stateParams, $timeout, ionicMaterialInk, CtrlService,FIREBASE_URL, $firebaseArray,ionicMaterialMotion,NgMap) {
      $scope.$parent.showHeader();
     $scope.$parent.clearFabs();
     $scope.isExpanded = true;
@@ -284,7 +285,7 @@ angular.module('starter.controllers', [])
         selector: '.animate-fade-slide-in .item'
     });
 
-//     
+/////// HeatMap Start /////
  var heatmap, vm = this;
   vm.onMapOverlayCompleted = function(e){
     console.log(e.type);
@@ -328,6 +329,22 @@ angular.module('starter.controllers', [])
     $scope.changeOpacity = function() {
       heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
     }
+
+   
+    /////// HeatMap End /////
+
+     var baseRef = new Firebase(FIREBASE_URL + '/openbeds');
+	var scrollRef = new Firebase.util.Scroll(baseRef, 'agcid');
+	$scope.streetLights = $firebaseArray(scrollRef);
+    scrollRef.scroll.next(100);
+	console.log('Street Lights:', $scope.streetLights);
+
+    $scope.currentCoords;
+    // Call Service to get Current Co-ords
+	$scope.currentCoords  = CtrlService.getCoords();
+	console.log('Currnet coords:' , $scope.currentCoords.lat + ', ' + $scope.currentCoords.lon);
+
+
 
 })
 

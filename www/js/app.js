@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', ,'ngMap','ionic-material', 'ionMdInput','ngtweet','auth0','firebase'])
+angular.module('starter', ['ionic', 'starter.controllers','ngCordova' ,'ngMap','ionic-material', 'ionMdInput','ngtweet','auth0','firebase','angular-storage'])
 .constant('FIREBASE_URL','https://homelesscare.firebaseio.com/')    
 
 .directive('groupedRadio', function() {
