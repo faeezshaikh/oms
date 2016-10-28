@@ -337,7 +337,13 @@ CtrlService.saveCurrentCoords();
 	var scrollRef = new Firebase.util.Scroll(baseRef, 'agcid');
 	$scope.streetLights = $firebaseArray(scrollRef);
     scrollRef.scroll.next(100);
-	console.log('Street Lights:', $scope.streetLights);
+    console.log('Array Street Lights:', $scope.streetLights);
+    var taxidata = [] ;
+    $scope.streetLights.forEach(function(element) {
+        taxidata.push(new google.maps.LatLng(element.agc_ADDR_LATITUDE, element.agc_ADDR_LONGITUDE));
+        console.log('Pushing Street Lights:', taxidata);
+    }, this);
+	console.log('Street Lights:', taxidata);
 
     $scope.currentCoords;
     // Call Service to get Current Co-ords

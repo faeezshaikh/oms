@@ -37,23 +37,23 @@ map {
   <ng-map center="41,-87" zoom="3"></ng-map>
 </div>-->
 
- <div id="panel">
+ <!--<div id="panel">
       <button ng-click="toggleHeatmap()">Toggle Heatmap</button>
       <button ng-click="changeGradient()">Change gradient</button>
       <button ng-click="changeRadius()">Change radius</button>
       <button ng-click="changeOpacity()">Change opacity</button>
-    </div>
+    </div>-->
 
- <div class="button-bar padding">
+ <!--<div class="button-bar padding">
       <a grouped-radio="'Family'" ng-model="data.demographic">Complaints</a>
       <a grouped-radio="'Male'" ng-model="data.demographic">Heatmap</a>
        <a grouped-radio="'Female'" ng-model="data.demographic">Both</a>
-    </div>
+    </div>-->
 
 
 <!--Heatmap-->
-<!--<map zoom="10" center="{{currentCoords.lat}},{{currentCoords.lon}}" map-type-id="SATELLITE">-->
-  <map zoom="10" center="{{currentCoords.lat}},{{currentCoords.lon}}" >
+<map zoom="10" center="{{currentCoords.lat}},{{currentCoords.lon}}" map-type-id="SATELLITE">
+  <!--<map zoom="13" center="37.775,-122.434"  map-type-id="SATELLITE" >-->
    <drawing-manager
      on-overlaycomplete="onMapOverlayCompleted()"
      position="ControlPosition.TOP_CENTER"
@@ -65,7 +65,7 @@ map {
    
 
 <!--Street Lights-->
-    <marker id='{{agent.agcid}}'  ng-repeat = "agent in filtered = (streetLights | filter:searchText)" 
+    <!--<marker id='{{agent.agcid}}'  ng-repeat = "agent in filtered = (streetLights | filter:searchText)" 
            		 		position="{{[agent.agc_ADDR_LATITUDE,agent.agc_ADDR_LONGITUDE]}}"
            		 		on-click="showDetail(event,agent)"
 										icon="img/lightout.png"
@@ -103,7 +103,7 @@ map {
 					      </info-window>
            		
            		 
-           		 </marker> 	
+           		 </marker> 	-->
                   <!--Street Lights-->
 
  </map>
